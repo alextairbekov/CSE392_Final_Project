@@ -1,0 +1,32 @@
+Name: Alexander Tairbekov
+SBUID: 109320463
+
+CSE 392 Final Project Report: Measuring User Engagement with Stochastic Processes
+
+Introduction:
+
+The structure of popular social networks relies on users making posts on their social media sites, and having other users create threads of comments based on them. What I intend to determine is the stochastic process given by each thread, as to determine how likely a user would be to engage in conversation with another user. 
+
+Methodology:
+
+We make use of **stochastic processes** in order to determine how engaged a user is with another user. A stochastic process is a collection of random variables defined on a probability space, indexed by some **index set** T. 
+
+The specific stochastic process I use in my implementation is a renewal process with arbitrary but IID distribution in time-difference between a comment and a reply to that comment.
+
+Whenever a user replies to a comment or post by another user for the first time in a given thread, we can begin to measure the times between the first user's post, and the conversing user's reply to that post. We make the assumption that each "time difference" between two comments is independent and identically distributed for two given users.
+
+Example: Analyzing user posts on reddit.com
+
+We can analyze how responsive a given reddit user is by looking at the frequency with which they enter a conversation with another user. To do this we analyze popular (brand-safe) posts on reddit.com and see the frequency with which two users enter a back-and-forth conversation.
+
+In this particular case we are not concerned with the votes or content of the posts made by the users, but solely by the frequency by which two users enter into a conversation.
+
+Popular locations for sampling posts from: 
+
+Media: /r/books, /r/movies, /r/art
+Scholarly sources: /r/math, /r/programming
+Languages: /r/cpp, /r/python
+
+To generate new data I constructed undirected graphs between users in the most recent 100 posts I was able to generate from the site. From each post I computed the difference between comments. The generated graphs note the users' replies to each other (with eai being empty for one-time comments, and having time differences noted when a back-and-forth conversation occurred.)
+
+Final Results: Currently, I was able to generate a directed graph between users, which is labeled with a list of random variables specifying the time-difference. See the final results as published on https://www.github.com/alextairbekov/CSE392_Final_Project
