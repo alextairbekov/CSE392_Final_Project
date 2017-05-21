@@ -1,5 +1,6 @@
 import praw
 from snap import *
+import statistics as stats
 
 def add_new_user(user_name, user_dict, network):
     user_id = user_dict.get(user_name, -1)
@@ -42,7 +43,7 @@ def load_comment(edge_id, parent_name, author_name, created_utc, replies):
 
 reddit = praw.Reddit(user_agent='linux:reds:v0.0.1 (by /u/anvils-reloaded)', client_id='7Rx0lKv3vHNvZA', client_secret='ys6ywb8ke4OKCF4JSC9mf82Dq3k')
 
-submissions = reddit.subreddit('programming').new(limit=100)
+submissions = reddit.subreddit('music').new(limit=100)
 
 for submission in submissions:
     
@@ -74,4 +75,20 @@ for submission in submissions:
 
     # sort and build a distribution of means, variances 
 
-    net.Dump()
+data_list = len(users) * [[]]
+
+for user_name, user_id in users.iteritems():
+    # just compute the mean and variance for all time delays
+    for edge_id in net.GetNI(user_id).GetOutEdges():
+        attributes = TIntV()
+        if edge_id is not -1:
+            net.IntAttrValueEI(edge_id, attributes)
+        data_list[user_id] = data_list[user_id] + [attributes[i] for i in range(attributes.Len())]
+
+means = [stats.mean(data) if len(data) != 0 else float('nan') for data in data_list]
+#filter(lambda v: v==v, means)
+means = sorted(filter(lambda v: v==v, means))
+for e in means:
+    print e
+#stdev = [stats.stdev(data) if len(data) > 1 else float('nan') for data in data_list]
+# cool, now we have the list of all time differences.
